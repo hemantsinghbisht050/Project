@@ -140,15 +140,15 @@ d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/C
       .text("Number");
 
     // Add the line
-    svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "green")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.chi_cases) })
-        );
+    //svg.append("path")
+      //.datum(data)
+      //.attr("fill", "none")
+      //.attr("stroke", "green")
+      //.attr("stroke-width", 1.5)
+      //.attr("d", d3.line()
+        //.x(function(d) { return x(d.date) })
+        //.y(function(d) { return y(d.chi_cases) })
+        //);
     
     svg.append("path")
       .datum(data)
@@ -184,10 +184,11 @@ d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/C
        .data(data)			
        .enter()
        .append("circle")								
-       .attr("r", 2.5)		
+       .attr("r", 3.0)		
        .attr("cx", function(d) { return x(d.date); })		 
        .attr("cy", function(d) { return y(d.chi_cases); })		
-       .attr("fill", 'blue')
+       .attr("fill", 'none')
+       .style("stroke", "blue")
        .on('mouseover', function (d) {
           //d3.select(this).transition()
           //     .duration('50')
@@ -200,7 +201,7 @@ d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/C
           //console.log(val);
           div.html(val)
           .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY - 28) + "px");
+          .style("top", (d3.event.pageY) + "px");
         })    
       .on('mouseout', function (d) {
             //d3.select(this).transition()
