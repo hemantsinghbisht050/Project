@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<head>
+<title>NV:COVID-19 Cases per Month</title>
+</head>
+<body>
+<h1>COVID-19 Cases per Month</h1>
+<A HREF="./index.html">Go Back Home</A>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script>
+// set the dimensions and margins of the graph
+var margin = 50,
+    width = 1200 - margin ,
+    height = 500 - margin;
+var div = d3.select("body")
+    .append("div")
+    .attr("id", "tooltip")
+    .attr("opacity", 0);
+
+// append the svg object to the body of the page
+var svg = d3.select("body")
+  .append("svg")
+    .attr("width", 1200 + margin)
+    .attr("height", 500 + margin )
+  .append("g")
+    .attr("transform",
+          "translate(" + margin+ "," + margin + ")");
+
+//Read the Chicago data
+d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/COVID-19_Daily_Cases_Deaths_Hospitalizations.csv",
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%m/%d/%Y")(d.Date), value : d.Total_Cases, totaldeaths:d.Total_Deaths }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+    var chi_max_confirmedCase = d3.max(data, function(d) { return +d.value; });
+    var chi_max_deaths = d3.max(data, function(d) { return +d.totaldeaths; });
+    if (chi_max_confirmedCase>chi_max_deaths) {
+      var chi_max = chi_max_confirmedCase;
+    } else {
+      var chi_max = chi_max_deaths;
+    }
+    console.log(chi_max);
+    var chi_min_confirmedCase = d3.min(data, function(d) { return +d.value; });
+    var chi_min_deaths = d3.min(data, function(d) { return +d.totaldeaths; });
+    if (chi_min_confirmedCase<chi_min_deaths) {
+      var chi_min = chi_max_confirmedCase;
+    } else {
+      var chi_min = chi_min_deaths;
+    }
+    console.log(chi_min);
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b/%d/%y")));
+
+    // Add Y axis
+    //var y = d3.scaleLinear()
+      //.domain([chi_min,chi_max])
+      //.range([ height, 0 ]);
+    //svg.append("g")
+     // .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "green")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        );
+        var formatDate = d3.timeFormat("%b/%m/%Y");
+    svg.selectAll("dot")	
+       .data(data)			
+       .enter().append("circle")								
+       .attr("r", 2.5)		
+       .attr("cx", function(d) { return x(d.date); })		 
+       .attr("cy", function(d) { return y(d.value); })		
+       .attr("fill", 'blue')
+       .on('mouseover', function (d, i) {
+          d3.select(this).transition()
+               .duration('50')
+               .attr('opacity', '.85');
+          //Makes the new div appear on hover:
+          div.transition()
+               .duration(50)
+               .style("opacity", 1);
+          var val = formatDate(d.date)+': '+(d.value).toString()+' Cases';
+          console.log(val);
+          div.html(val)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY) + "px");
+        })    
+      .on('mouseout', function (d, i) {
+            d3.select(this).transition()
+                .duration('50')
+                .attr('opacity', '1');
+            //Makes the new div disappear:
+            div.transition()
+                .duration('50')
+                .style("opacity", 0);
+      });
+
+})
+
+//Read the IL data
+d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/IDPHExport20210729052420563.csv",
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { testdate : d3.timeParse("%m/%d/%Y")(d.testDate), confirmedCases : d.confirmed_cases, deaths: d.deaths }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+    var max_confirmedCase = d3.max(data, function(d) { return +d.confirmedCases; });
+    var max_deaths = d3.max(data, function(d) { return +d.deaths; });
+    if (max_confirmedCase>max_deaths) {
+      var max = max_confirmedCase;
+    } else {
+      var max = max_deaths;
+    }
+    var min_confirmedCase = d3.min(data, function(d) { return +d.confirmedCases; });
+    var min_deaths = d3.min(data, function(d) { return +d.deaths; });
+    if (min_confirmedCase<min_deaths) {
+      var min = max_confirmedCase;
+    } else {
+      var min = min_deaths;
+    }
+    //console.log(min);
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.testdate; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b/%y")));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([min,max])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.testdate) })
+        .y(function(d) { return y(d.confirmedCases) })
+        );
+        var formatDate = d3.timeFormat("%b/%m/%Y");
+    svg.selectAll("dot1")	
+       .data(data)			
+       .enter().append("circle")								
+       .attr("r", 2.5)		
+       .attr("cx", function(d) { return x(d.testdate); })		 
+       .attr("cy", function(d) { return y(d.confirmedCases); })		
+       .attr("fill", 'yellow')
+       .on('mouseover', function (d, i) {
+          d3.select(this).transition()
+               .duration('50')
+               .attr('opacity', '.85');
+          //Makes the new div appear on hover:
+          div.transition()
+               .duration(50)
+               .style("opacity", 1);
+          var val = formatDate(d.date)+': '+(d.value).toString()+' Cases';
+          console.log(val);
+          div.html(val)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY) + "px");
+        })    
+      .on('mouseout', function (d, i) {
+            d3.select(this).transition()
+                .duration('50')
+                .attr('opacity', '1');
+            //Makes the new div disappear:
+            div.transition()
+                .duration('50')
+                .style("opacity", 0);
+      });
+
+});
+</script>
+<A HREF="./index.html">Back Home</A>
+</body>
+</html>
