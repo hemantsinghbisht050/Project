@@ -1,328 +1,347 @@
 <!DOCTYPE html>
-<head>
-<title>NV:COVID-19 Cases per Month</title>
-</head>
-<style> /* set the CSS */
- div.tooltip {	
-      position: absolute;			
-      text-align: center;			
-      width: 60px;					
-      height: 28px;					
-      padding: 2px;				
-      font: 12px sans-serif;		
-      background: lightsteelblue;	
-      border: 0px;		
-      border-radius: 8px;			
-      pointer-events: none;			
-  }
-  
-  </style>
-<body>
-<h1>COVID-19 Cases per Month</h1>
-<A HREF="./index.html">Go Back Home</A>
+<meta charset="utf-8">
+  <body>
+    <h1><strong>COVID-19 Impact on Illinois and Chicago</strong></h1>
+    <p>
+      This page shows a chart with number of confirmed number of Deaths and Cases in Chicago and Illinois.
+      Please feel free to <em><u>hover over</u></em> the graph to see the <em><u>Number of cases</u></em> at any point of Time 
+      When finished please <em><u>CLICK</u></em> the button ,at the bottom of the page,for the next chart you would like to visit.
+    </p>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <script>
 
-<script>
+    // set the dimensions and margins of the graph
+    var margin = 50,
+        width = 1200 - margin ,
+        height = 500 - margin;
 
-// set the dimensions and margins of the graph
-var margin = 50,
-    width = 1200 - margin ,
-    height = 500 - margin;
+    var div = d3.select("body")
+                .append("div")
+                .attr("id", "tooltip")
+                .attr("opacity", 0);
 
-var div = d3.select("body")
-            .append("div")
-            .attr("id", "tooltip")
-            .attr("opacity", 0);
+    // append the svg object to the body of the page
+    var svg = d3.select("body")
+      .append("svg")
+        .attr("width", 1200 + margin)
+        .attr("height", 500 + margin )
+      .append("g")
+        .attr("transform",
+              "translate(" + margin+ "," + margin + ")");
 
-// append the svg object to the body of the page
-var svg = d3.select("body")
-  .append("svg")
-    .attr("width", 1200 + margin)
-    .attr("height", 500 + margin )
-  .append("g")
-    .attr("transform",
-          "translate(" + margin+ "," + margin + ")");
+    svg.append("circle").attr("cx",1000).attr("cy",0).attr("r", 6).style("fill", "green")
+    svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "red")
+    svg.append("circle").attr("cx",1000).attr("cy",40).attr("r", 6).style("fill", "purple")
+    svg.append("circle").attr("cx",1000).attr("cy",60).attr("r", 6).style("fill", "turquoise")
+    svg.append("text").attr("x", 1010).attr("y", 0).text("COVID-19 Cases in Chicago").style("font-size", "15px").style("fill", "green").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Deaths in Chicago").style("font-size", "15px").style("fill", "red").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 40).text("COVID-19 Cases in Illinois").style("font-size", "15px").style("fill", "purple").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 60).text("COVID-19 Deaths in Illinois").style("font-size", "15px").style("fill", "turquoise").attr("alignment-baseline","middle")
 
-svg.append("circle").attr("cx",1000).attr("cy",0).attr("r", 6).style("fill", "green")
-svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "red")
-svg.append("circle").attr("cx",1000).attr("cy",40).attr("r", 6).style("fill", "purple")
-svg.append("circle").attr("cx",1000).attr("cy",60).attr("r", 6).style("fill", "yellow")
-svg.append("text").attr("x", 1010).attr("y", 0).text("COVID-19 Cases in Chicago").style("font-size", "15px").style("fill", "green").attr("alignment-baseline","middle")
-svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Deaths in Chicago").style("font-size", "15px").style("fill", "red").attr("alignment-baseline","middle")
-svg.append("text").attr("x", 1010).attr("y", 40).text("COVID-19 Cases in Illinois").style("font-size", "15px").style("fill", "purple").attr("alignment-baseline","middle")
-svg.append("text").attr("x", 1010).attr("y", 60).text("COVID-19 Deaths in Illinois").style("font-size", "15px").style("fill", "yellow").attr("alignment-baseline","middle")
+    //Read the Chicago data
+    d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/COVID-19_IL_And_CHICAGO.csv",
 
-//Read the Chicago data
-d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/COVID-19_IL_And_CHICAGO.csv",
+      // When reading the csv, I must format variables:
+      function(d){
+        return { date :     d3.timeParse("%m/%d/%Y")(d.Date), 
+                chi_cases: d.Total_Cases, 
+                chi_deaths:d.Total_Deaths,
+                il_cases:  d.confirmed_cases, 
+                il_deaths: d.deaths } 
+      },
 
-  // When reading the csv, I must format variables:
-  function(d){
-    return { date :     d3.timeParse("%m/%d/%Y")(d.Date), 
-             chi_cases: d.Total_Cases, 
-             chi_deaths:d.Total_Deaths,
-             il_cases:  d.confirmed_cases, 
-             il_deaths: d.deaths } 
-  },
+      // Now I can use this dataset:
+      function(data) {
+        //console.log(data.chi_cases);
+        var chi_max_confirmedCase = d3.max(data, function(d) { return +d.chi_cases; });
+        var chi_max_deaths = d3.max(data, function(d) { return +d.chi_deaths; });
+        if (chi_max_confirmedCase>chi_max_deaths) {
+          var chi_max = chi_max_confirmedCase;
+        } else {
+          var chi_max = chi_max_deaths;
+        };
+        console.log(chi_max);
+        var il_max_confirmedCase = d3.max(data, function(d) { return +d.il_cases; });
+        var il_max_deaths = d3.max(data, function(d) { return +d.il_deaths; });
+        if (il_max_confirmedCase>il_max_deaths) {
+          var il_max = il_max_confirmedCase;
+        } else {
+          var il_max = il_max_deaths;
+        };
+        console.log(il_max);
+        if (il_max > chi_max) {
+          var max = il_max;
+        } else {
+          var max = chi_max;
+        }
+        console.log(max);
+        
+        var chi_min_confirmedCase = d3.min(data, function(d) { return +d.chi_cases; });
+        var chi_min_deaths = d3.min(data, function(d) { return +d.chi_deaths; });
+        if (chi_min_confirmedCase<chi_min_deaths) {
+          var chi_min = chi_max_confirmedCase;
+        } else {
+          var chi_min = chi_min_deaths;
+        }
+        console.log(chi_min);
 
-  // Now I can use this dataset:
-  function(data) {
-    //console.log(data.chi_cases);
-    var chi_max_confirmedCase = d3.max(data, function(d) { return +d.chi_cases; });
-    var chi_max_deaths = d3.max(data, function(d) { return +d.chi_deaths; });
-    if (chi_max_confirmedCase>chi_max_deaths) {
-      var chi_max = chi_max_confirmedCase;
-    } else {
-      var chi_max = chi_max_deaths;
-    };
-    console.log(chi_max);
-    var il_max_confirmedCase = d3.max(data, function(d) { return +d.il_cases; });
-    var il_max_deaths = d3.max(data, function(d) { return +d.il_deaths; });
-    if (il_max_confirmedCase>il_max_deaths) {
-      var il_max = il_max_confirmedCase;
-    } else {
-      var il_max = il_max_deaths;
-    };
-    console.log(il_max);
-    if (il_max > chi_max) {
-      var max = il_max;
-    } else {
-      var max = chi_max;
-    }
-    console.log(max);
-    
-    var chi_min_confirmedCase = d3.min(data, function(d) { return +d.chi_cases; });
-    var chi_min_deaths = d3.min(data, function(d) { return +d.chi_deaths; });
-    if (chi_min_confirmedCase<chi_min_deaths) {
-      var chi_min = chi_max_confirmedCase;
-    } else {
-      var chi_min = chi_min_deaths;
-    }
-    console.log(chi_min);
+        var il_min_confirmedCase = d3.min(data, function(d) { return +d.il_cases; });
+        var il_min_deaths = d3.min(data, function(d) { return +d.il_deaths; });
+        if (il_min_confirmedCase<il_min_deaths) {
+          var il_min = il_max_confirmedCase;
+        } else {
+          var il_min = il_min_deaths;
+        }
+        console.log(il_min);
 
-    var il_min_confirmedCase = d3.min(data, function(d) { return +d.il_cases; });
-    var il_min_deaths = d3.min(data, function(d) { return +d.il_deaths; });
-    if (il_min_confirmedCase<il_min_deaths) {
-      var il_min = il_max_confirmedCase;
-    } else {
-      var il_min = il_min_deaths;
-    }
-    console.log(il_min);
+        if (il_min <= chi_min) {
+          var min = il_min;
+        } else {
+          var min = chi_min;
+        }
+        console.log(min);
 
-    if (il_min <= chi_min) {
-      var min = il_min;
-    } else {
-      var min = chi_min;
-    }
-    console.log(min);
-
-    // Add X axis --> it is a date format
-    var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return d.date; }))
-      .range([ 0, width ]);
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b/%y")));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([min,max])
-      .range([ height, 0 ]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
-      svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Number");
-
-    // Add the line
-    //svg.append("path")
-      //.datum(data)
-      //.attr("fill", "none")
-      //.attr("stroke", "green")
-      //.attr("stroke-width", 1.5)
-      //.attr("d", d3.line()
-        //.x(function(d) { return x(d.date) })
-        //.y(function(d) { return y(d.chi_cases) })
-        //);
-    
-    svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "red")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.chi_deaths) })
-        );
-
-    svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "purple")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.il_cases) })
-        );
-    
-    svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "yellow")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.il_deaths) })
-        );
-    var formatDate = d3.timeFormat("%b/%d/%Y");
-    svg.selectAll("dot")	
-       .data(data)			
-       .enter()
-       .append("circle")								
-       .attr("r", 3.0)		
-       .attr("cx", function(d) { return x(d.date); })		 
-       .attr("cy", function(d) { return y(d.chi_cases); })		
-       .attr("fill", 'none')
-       .style("stroke", "blue")
-       .on('mouseover', function (d) {
-          //d3.select(this).transition()
-          //     .duration('50')
-          //     .attr('opacity', '.85');
-          //Makes the new div appear on hover:
-          div.transition()
-               .duration(200)
-               .style("opacity", .9);
-          var val = formatDate(d.date)+': '+(d.chi_cases).toString()+' Cases';
-          //console.log(val);
-          div.html(val)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY) + "px");
-        })    
-      .on('mouseout', function (d) {
-            //d3.select(this).transition()
-            //    .duration('50')
-            //    .attr('opacity', '1');
-            //Makes the new div disappear:
-            div.transition()
-                .duration('50')
-                .style("opacity", 0);
-      });
-      
-    var parseDate = function(d){ return d3.timeParse("%m/%d/%Y")(d)}
-      const annotations = [
-       
-    // annotation 1
-        {
-      note: {
-        label: "Illinois residents required to wear masks outside. Cases: 1826",
-        title: " April 23, 2020",
-        wrap: 150,  // try something smaller to see text split in several lines
-        padding: 10   // More = text lower
-      
-     },
-     connector: {
-            end: "dot" 
-          },
-     color: ["orange"],
-     x: x(parseDate('4/23/2020')),
-     y: y(1826),
-     dy: -100,
-
-     
-    type: d3.annotationCalloutElbow,
-    },
-    //annotation 2
-    {
-      note: {
-        label: "Gov. J.B. Pritzker ended the statewide mask requirement. Case count : 401",
-        title: "June 11, 2021",
-        wrap: 150,  // try something smaller to see text split in several lines
-        padding: 10   // More = text lower
-      
-     },
-     connector: {
-            end: "dot" 
-          },
-     color: ["orange"],
-     x: x(parseDate('6/11/2021')),
-     y: y(401),
-     dy: -100,
-    type: d3.annotationCalloutElbow,
-    }, 
-    
-    //annotation 3
-    {
-      note: {
-        label: "Travel restrictions announced for travelers from 15 states entering Chicago. Case count: 614",
-        title: "July 6, 2020",
-        wrap: 150,  // try something smaller to see text split in several lines
-        padding: 10   // More = text lower
-      
-     },
-     connector: {
-            end: "dot" 
-          },
-     color: ["orange"],
-     x: x(parseDate('7/6/2020')),
-     y: y(614),
-     dy: -100,
-    type: d3.annotationCalloutElbow,
-    }, 
-
-    //annotation 4
-    {
-      note: {
-        label: "Gov. J.B. Pritzker released his Restore Illinois plan containing 5 phases. Case count: 2341",
-        title: "May 4, 2020",
-        wrap: 150,  // try something smaller to see text split in several lines
-        padding: 10   // More = text lower
-      
-     },
-     connector: {
-            end: "dot" 
-          },
-     color: ["orange"],
-     x: x(parseDate('5/4/2020')),
-     y: y(2341),
-     dy: -250,
-    type: d3.annotationCalloutElbow,
-    }, 
-    //annotation 5
-    {
-      note: {
-        label: "Bars and restaurants cannot offer indoor service, gyms to cease indoor group classes. Case count: 12657",
-        title: "Nov 11, 2020",
-        wrap: 150,  // try something smaller to see text split in several lines
-        padding: 10   // More = text lower
-      
-     },
-     connector: {
-            end: "dot" 
-          },
-     color: ["orange"],
-     x: x(parseDate('11/11/2020')),
-     y: y(12657),
-     dy: -50,
-     dx: 80,
-    type: d3.annotationCalloutElbow,
-    }, 
-      ];
-      
-      var makeAnnotations = d3.annotation()
-        .annotations(annotations)
-     
+        // Add X axis --> it is a date format
+        var x = d3.scaleTime()
+          .domain(d3.extent(data, function(d) { return d.date; }))
+          .range([ 0, width ]);
         svg.append("g")
-    .call(makeAnnotations)
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b/%y")));
+          svg.append("text")
+          .attr("transform", "translate(500,500)")
+          .style("text-anchor", "middle")
+          .attr("fill", "black")
+          .text("DATES");
+          
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain([min,max])
+          .range([ height, 0 ]);
+        svg.append("g")
+          .call(d3.axisLeft(y));
+          svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left)
+          .attr("x",0 - margin)
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("NUMBERS");
 
-})
+        // Add the line
+        //svg.append("path")
+          //.datum(data)
+          //.attr("fill", "none")
+          //.attr("stroke", "green")
+          //.attr("stroke-width", 1.5)
+          //.attr("d", d3.line()
+            //.x(function(d) { return x(d.date) })
+            //.y(function(d) { return y(d.chi_cases) })
+            //);
+        
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "red")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.chi_deaths) })
+            );
+
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "purple")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.il_cases) })
+            );
+        
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "yellow")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.il_deaths) })
+            );
+        var formatDate = d3.timeFormat("%b/%d/%Y");
+        svg.selectAll("dot")	
+          .data(data)			
+          .enter()
+          .append("circle")								
+          .attr("r", 3.0)		
+          .attr("cx", function(d) { return x(d.date); })		 
+          .attr("cy", function(d) { return y(d.chi_cases); })		
+          .attr("fill", 'none')
+          .style("stroke", "green")
+          .on('mouseover', function (d) {
+              //d3.select(this).transition()
+              //     .duration('50')
+              //     .attr('opacity', '.85');
+              //Makes the new div appear on hover:
+              div.transition()
+                  .duration(200)
+                  .style("opacity", .9);
+              var val = formatDate(d.date)+': '+(d.chi_cases).toString()+' Cases';
+              //console.log(val);
+              div.html(val)
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY) + "px");
+            })    
+          .on('mouseout', function (d) {
+                //d3.select(this).transition()
+                //    .duration('50')
+                //    .attr('opacity', '1');
+                //Makes the new div disappear:
+                div.transition()
+                    .duration('50')
+                    .style("opacity", 0);
+          });
+          
+        var parseDate = function(d){ return d3.timeParse("%m/%d/%Y")(d)}
+          const annotations = [
+          
+        // annotation
+            {
+          note: {
+            label: "Statewide Masks Requirement Starts.",
+            title: " April 23, 2020",
+            wrap: 150,
+            //padding: 10
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('4/23/2020')),
+        y: y(1826),
+        dy: -100,
+        
+        type: d3.annotationCalloutElbow,
+        },
+        //annotation
+        {
+          note: {
+            label: "Statewide Mask requirement Ends.",
+            title: "June 11, 2021",
+            wrap: 150,
+            //padding:
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('6/11/2021')),
+        y: y(401),
+        dy: -80,
+        dx: 10,
+        type: d3.annotationCalloutElbow,
+        }, 
+        
+        //annotation
+        {
+          note: {
+            label: "Travel restrictions to enter Chicago announced.",
+            title: "July 6, 2020",
+            wrap: 150, 
+            //padding: 10
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('7/6/2020')),
+        y: y(614),
+        dy: -100,
+        type: d3.annotationCalloutElbow,
+        }, 
+
+        //annotation
+        {
+          note: {
+            label: "No Indoor services allowed,Gyms closed.",
+            title: "Nov 11, 2020",
+            wrap: 150,
+            //padding: 10
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('11/11/2020')),
+        y: y(12657),
+        dy: -50,
+        dx: 80,
+        type: d3.annotationCalloutElbow,
+        },
+        
+        //annotation
+        {
+          note: {
+            label: "Age 65+ eligible for Vaccination.",
+            title: "Jan 25, 2021",
+            wrap: 150,  
+            //padding: 0   // More = text lower
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('01/25/2021')),
+        y: y(2944),
+        dy: -100,
+        dx: 10,
+        type: d3.annotationCalloutElbow,
+        },
+
+        //annotation
+        {
+          note: {
+            label: "Age 16+ eligible for Vaccination.",
+            title: "Apr 12, 2021",
+            wrap: 150,  // try something smaller to see text split in several lines
+            padding: 10   // More = text lower
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('04/12/2021')),
+        y: y(2433),
+        dy: -100,
+        dx: 10,
+        type: d3.annotationCalloutElbow,
+        },
+          ];
+          
+          var makeAnnotations = d3.annotation()
+            .annotations(annotations)
+        
+            svg.append("g")
+        .call(makeAnnotations)
+
+    })
 
 
-</script>
-<A HREF="./index.html">Back Home</A>
-</body>
+    </script>
+    <p>
+      Source of data: <em>Chicago Health & Human Services</em> and <em>Illinois Department of Public Health</em>
+    </p>
+    <button onclick="document.location='./index.html'"class="button button">HOME</button>
+    <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:400px;">COVID-19 DEATHS IN CHICAGO</button>
+    <button onclick="document.location='./COVID_Cases.html'"class="button button"style="margin-left:400px;">COVID-19 CASES IN CHICAGO</button>
+  </body>
 </html>
