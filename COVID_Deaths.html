@@ -15,10 +15,9 @@
 <!-- <button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"style="margin-left:1200px;">NEXT</button> -->
 <h2><strong>COVID-19 Daily Confirmed Deaths in Chicago by Group</strong></h2>
   <p>
-    This page shows a chart with number of confirmed number of Deaths in Chicago over the period.
-    The below chart can show the number among various groups in Chicago,By default its showing Detahs among <em><b>MALES</b></em>.<br>
-    Please feel free to select the group, you are most interested in, from the <em><b>drop-down menu below</b></em>.The chart also shows the <em>total number</em> of deaths for the group on the top right corner<br>
-    When finished please <em><u>CLICK</u></em> the button ,at the bottom of the page,for the next chart you would like to visit OR simply press NEXT.
+   This page shows a chart with number of confirmed number of Deaths in Chicago for each group over the period.
+    The below chart can show the number of deaths among various groups in Chicago,please feel free to pick a group of you choice from the drop down below.
+    The chart also shows the <em>total number</em> of deaths for the group on the top right corner of the graph.When finished please click the HOME button on the top of scress to return to the Introduction page.
   </p>
 <body>
   
@@ -53,7 +52,7 @@
       function(data) {
 
           // List of groups (here I have one group per column)
-          var allGroup = ["Male","Female","Unknown_Gender","Ages_0to17","Ages_18to29","Ages_30to39","Ages_40to49","Ages_50to59","Ages_60to69","Ages_70to79","Age_80andAbove","Ages_Unknown","Latinx","Asian_NonLatinx","Black_NonLatinx","White_NonLatinx","OtherRace_NonLatinx","UnknownRace_Ethnicity"]
+          var allGroup = ["Male","Female","Unknown_Gender","Ages_0to17","Ages_18to29","Ages_30to39","Ages_40to49","Ages_50to59","Ages_60to69","Ages_70to79","Ages_80+","Ages_Unknown","Latinx","Asian_NonLatinx","Black_NonLatinx","White_NonLatinx","OtherRace_NonLatinx","UnknownRace_Ethnicity"]
           //console.log(data.date);
           // add the options to the button
           d3.select("#selectButton")
@@ -135,13 +134,13 @@
       
           // A function that update the chart
           var sum = d3.sum(data.map(function(d){ return d.Deaths_Male}));
-          var sumDisplay = "Deaths_Male Total is " + sum;
+          var sumDisplay = "Total cases for group of Male is " + sum;
           var displaySum = svg.append("svg:text");
                 displaySum
                 .text(sumDisplay)
                 .attr("x", 800)
                 .attr("y", 10)
-                .attr("fill", "black"); 
+                .attr("fill", "red"); 
 
           function update(selectedGroup) {
             var parseDate = function(d){ return d3.timeParse("%m/%d/%Y")(d)};

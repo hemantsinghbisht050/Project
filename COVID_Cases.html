@@ -11,10 +11,10 @@
 <body>
   <h2><strong>COVID-19 Daily Confirmed Cases in Chicago by Group</strong></h2>
   <p>
-    This page shows a chart with number of confirmed number of Cases in Chicago over the period.
-    The below chart can show the number among various groups in Chicago,By default its showing cases among <em><b>FEMALES</b></em>.<br>
-    Please feel free to select the group, you are most interested in, from the <em><b>drop-down menu below</b></em>.The chart also shows the <em>total number</em> of cases for the group on the top right side<br>
-    When finished please <em><u>CLICK</u></em> the button ,at the bottom of the page,for the next chart you would like to visit OR simply press NEXT.
+    This page shows a chart with number of confirmed number of Cases in Chicago for each group over the period.
+    The below chart can show the number of cases among various groups in Chicago,please feel free to pick a group of you choice from the drop down below.
+    The chart also shows the <em>total number</em> of cases for the group on the top right corner of the graph
+    When finished please click NEXT to continue the journey, Next scene we will see the daily confirmed deaths with repect to Illinois's number of daily deaths.
   </p>
   <link rel="stylesheet" href="style.css">
   <script src="https://d3js.org/d3.v4.js"></script>
@@ -120,7 +120,7 @@
               .text(sumDisplay)
               .attr("x", 800)
               .attr("y", 10)
-              .attr("fill", "black");
+              .attr("fill", "darkgreen");
 
             // var line = svg
             //.append("g")
