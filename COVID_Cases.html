@@ -178,7 +178,7 @@
       // annotation
           {
         note: {
-          label: "US COVID-19 Cases Reach 2 Million, Chicago Case count: 233",
+          label: "US COVID-19 Cases Reach 2 Million",
           title: " Jun 10, 2020",
           wrap: 150,
           //padding: 10
@@ -198,7 +198,7 @@
       // annotation 2
       {
         note: {
-          label: "Trump, First Lady Test Positive for COVID-19, Chicago Case count: 415",
+          label: "Trump, First Lady Test Positive for COVID-19",
           title: " Oct 2, 2020",
           wrap: 250,
           //padding: 10
@@ -219,7 +219,7 @@
       // annotation 3
       {
         note: {
-          label: "Globally, confirmed cases surpass 85 million, Chicago Case count: 1877",
+          label: "Globally, confirmed cases surpass 85 million",
           title: " Jan 4, 2021",
           wrap: 200,
           //padding: 10
@@ -236,6 +236,44 @@
       
       type: d3.annotationCalloutElbow,
       },
+      // annotation
+      {
+          note: {
+            label: "Statewide Masks Requirement Starts.",
+            title: " April 23, 2020",
+            wrap: 150,
+            //padding: 10
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('4/23/2020')),
+        y: y(0),
+        dy: -200,
+        
+        type: d3.annotationCalloutElbow,
+        },
+        //annotation
+        {
+          note: {
+            label: "Statewide Mask requirement Ends.",
+            title: "June 11, 2021",
+            wrap: 150,
+            //padding:
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('6/11/2021')),
+        y: y(0),
+        dy: -80,
+        dx: 10,
+        type: d3.annotationCalloutElbow,
+        }, 
         ];
         
         var makeAnnotations = d3.annotation()

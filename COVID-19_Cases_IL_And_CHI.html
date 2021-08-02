@@ -353,8 +353,8 @@
         // annotation 
       {
         note: {
-          label: "Trump, First Lady Test Positive for COVID-19",
-          title: " Oct 2, 2020",
+          label: "Chicago Highest Cases in One Day: 3360",
+          title: " Nov 10, 2020",
           wrap: 250,
           //padding: 10
         
@@ -363,8 +363,8 @@
               end: "dot" 
             },
       color: ["orange"],
-      x: x(parseDate('10/2/2020')),
-      y: y(2206),
+      x: x(parseDate('11/10/2020')),
+      y: y(3360),
       dy: -180,
       dx: -30,
       
@@ -387,6 +387,26 @@
       y: y(17608),
       dy: 5,
       dx: 50,
+      
+      type: d3.annotationCalloutElbow,
+      },
+      // annotation 
+      {
+        note: {
+          label: "Post Thanksgiving spike in Case, 12542 cases in a day",
+          title: " Dec 1, 2020",
+          wrap: 250,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('12/1/2020')),
+      y: y(12542),
+      dy: 0,
+      dx: 30,
       
       type: d3.annotationCalloutElbow,
       },

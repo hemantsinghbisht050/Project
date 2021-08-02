@@ -17,7 +17,7 @@
   <p>
    This page shows a chart with number of confirmed number of Deaths in Chicago for each group over the period.
     The below chart can show the number of deaths among various groups in Chicago,please feel free to pick a group of you choice from the drop down below.
-    The chart also shows the <em>total number</em> of deaths for the group on the top right corner of the graph.When finished please click the HOME button on the top of scress to return to the Introduction page.
+    The chart also shows the <em>total number</em> of deaths for the group on the top right corner of the graph.When finished please click the HOME button on the top of screen to return to the Introduction page.
   </p>
 <body>
   
@@ -134,7 +134,7 @@
       
           // A function that update the chart
           var sum = d3.sum(data.map(function(d){ return d.Deaths_Male}));
-          var sumDisplay = "Total Deaths for group of Male is " + sum;
+          var sumDisplay = "Total cases for group of Male is " + sum;
           var displaySum = svg.append("svg:text");
                 displaySum
                 .text(sumDisplay)
@@ -195,7 +195,7 @@
       // annotation
           {
         note: {
-          label: "US COVID-19 Deaths surpasses the 100,000 mark , Chicago Death count: 22",
+          label: "US COVID-19 Deaths surpasses the 100,000 mark",
           title: " May 28, 2020",
           wrap: 200,
           //padding: 10
@@ -213,27 +213,65 @@
       type: d3.annotationCalloutElbow,
       },
       
+      // // annotation
+      // {
+      //   note: {
+      //     label: "Two senior Cabinet ministers in Malawi die from COVID-19 Chicago Death count: 12",
+      //     title: " Jan 12, 2021",
+      //     wrap: 200,
+      //     //padding: 10
+        
+      // },
+      // connector: {
+      //         end: "dot" 
+      //       },
+      // color: ["orange"],
+      // //data: { date: "18-Sep-09", close: 185.02 },
+      // x: x(parseDate('1/12/2021')),
+      // y: y(0),
+      // dy: -100,
+      // dx: 60,
+      
+      // type: d3.annotationCalloutElbow,
+      // },
       // annotation
       {
-        note: {
-          label: "Two senior Cabinet ministers in Malawi die from COVID-19 Chicago Death count: 12",
-          title: " Jan 12, 2021",
-          wrap: 200,
-          //padding: 10
-        
-      },
-      connector: {
-              end: "dot" 
-            },
-      color: ["orange"],
-      //data: { date: "18-Sep-09", close: 185.02 },
-      x: x(parseDate('1/12/2021')),
-      y: y(0),
-      dy: -100,
-      dx: 60,
-      
-      type: d3.annotationCalloutElbow,
-      },
+          note: {
+            label: "Statewide Masks Requirement Starts.",
+            title: " April 23, 2020",
+            wrap: 150,
+            //padding: 10
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('4/23/2020')),
+        y: y(0),
+        dy: -220,
+        dx: 80,
+        type: d3.annotationCalloutElbow,
+        },
+        //annotation
+        {
+          note: {
+            label: "Statewide Mask requirement Ends.",
+            title: "June 11, 2021",
+            wrap: 150,
+            //padding:
+          
+        },
+        connector: {
+                end: "dot" 
+              },
+        color: ["orange"],
+        x: x(parseDate('6/11/2021')),
+        y: y(0),
+        dy: -80,
+        dx: 10,
+        type: d3.annotationCalloutElbow,
+        },
         ];
         
         var makeAnnotations = d3.annotation()
