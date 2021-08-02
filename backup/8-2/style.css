@@ -8,24 +8,16 @@ h1 { color: rgb(69, 95, 212);
 h2 { color: rgb(69, 95, 212);
         text-align: center; }
 
- .button1 {
-    /* background-color: white; 
+.button {
+    background-color: white; 
     color: black; 
-    border: 2px solid #008CBA;  */
-    height: 80px; 
-    width: 200px; 
-    font-size : 25px;
-    } 
-/* 
+    border: 2px solid #008CBA;
+    }
+
 .button:hover {
     background-color: #008CBA;
     color: white;
-    } */
-    .toptext {
-        display: flex;
-        align-items: right;
-      }
-
+    }
 
 .axisRed path{
         stroke: red;
@@ -42,7 +34,7 @@ div.tooltip {
     height: 28px;					
     padding: 2px;				
     font: 12px sans-serif;		
-    background: purple;	
+    background: lightsteelblue;	
     border: 0px;		
     border-radius: 8px;			
     pointer-events: none;			

@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<!--head>
-  <title>NV:COVID-19 Deaths</title>
-</head-->
-<body>
-  <h1><strong>Confirmed Deaths in Chicago</strong></h1>
+<!-- <div class="toptext">
+  <p><button onclick="document.location='./index.html'"style="margin-left:0;">HOME</button></p>
+  <p "text-align:center"><A HREF="./COVID_Cases.html"align="center"><< </A>Page 3 of 4<A HREF="./COVID-19_IL_And_CHICAGO.html"align="center"> >></A> </p>
+  <p><button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"style="margin-right:0px;">NEXT</button></p>
+</div> -->
+<button onclick="document.location='./index.html'"style="margin-left:0;">HOME</button>
+<p style="text-align:center"><A HREF="./COVID-19_Deaths_IL_And_CHI.html"align="center"><< </A>Page 5 of 5</p> 
+
+<button onclick="document.location='./COVID-19_Deaths_IL_And_CHI.html'"style="margin-left:0px;">BACK</button>
+<!-- <button onclick="document.location='./COVID_Deaths.html'"style="margin-left:0px;">NEXT</button> -->
+<!--button onclick="document.location='./COVID_Deaths.html'"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<!--button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<!-- <button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"style="margin-left:1200px;">NEXT</button> -->
+<h2><strong>COVID-19 Daily Confirmed Deaths in Chicago by Group</strong></h2>
   <p>
     This page shows a chart with number of confirmed number of Deaths in Chicago over the period.
     The below chart can show the number among various groups in Chicago,By default its showing Detahs among <em><b>MALES</b></em>.<br>
     Please feel free to select the group, you are most interested in, from the <em><b>drop-down menu below</b></em>.The chart also shows the <em>total number</em> of deaths for the group on the top right corner<br>
     When finished please <em><u>CLICK</u></em> the button ,at the bottom of the page,for the next chart you would like to visit OR simply press NEXT.
   </p>
+<body>
+  
   <link rel="stylesheet" href="style.css">
   <!-- Load d3.js -->
   
@@ -24,8 +35,8 @@
       // set the dimensions and margins of the graph
       var counter = 0;
       var margin =50,
-          width = 1200 - margin,
-          height = 500- margin;
+          width = 1200 - margin*2,
+          height = 500- margin*2;
       
       // append the svg object to the body of the page
       var svg = d3.select("#graph")
@@ -78,11 +89,11 @@
             .call(d3.axisLeft(y));
             svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x",0 - margin)
+        .attr("y", 0 - margin)
+        .attr("x",0 - height/2)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("NUMBERS"); 
+        .text("DEATHS"); 
     // var y1 = d3.scaleLinear()
           //.domain([0, d3.max(data, function(d) { return +d.Total_Cases; })])  
           //.domain([0, d3.max(data, function(d) { return +d.value; })])
@@ -107,7 +118,8 @@
               .attr("stroke", "red" )
               .style("stroke-width", 1)
               .style("fill", "none");
-
+          
+              
             // var line = svg
             //.append("g")
             //.append("path")
@@ -237,8 +249,8 @@
       </script>
       <br>
       <button onclick="document.location='./index.html'"class="button button">HOME</button>
-      <button onclick="document.location='./COVID_Cases.html'"class="button button"style="margin-left:500px;">COVID-19 CASES IN CHICAGO</button>
-      <button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"class="button button" style="margin-left:500px;">NEXT</button>
+      <!-- <button onclick="document.location='./COVID_Cases.html'"class="button button"style="margin-left:500px;">COVID-19 CASES IN CHICAGO</button> -->
+      <!-- <button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"class="button button" style="margin-left:1200px;">NEXT</button> -->
       <p>
         Source of data: <em>Chicago Health & Human Services</em>
       </p>

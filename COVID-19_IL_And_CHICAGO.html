@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
+<p style="text-align:center"><A HREF="./COVID_Deaths.html"align="center"><< </A>Page 3 of 4</p> 
+  
+<button onclick="document.location='./index.html'"style="margin-left:0;">HOME</button>
+<!--button onclick="document.location='./COVID_Deaths.html'"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<!--button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<!-- <button onclick="document.location='./COVID-19_IL_And_CHICAGO.html'"style="margin-left:1200px;">NEXT</button> -->
+
   <body>
     <h1><strong>COVID-19 Impact on Illinois and Chicago</strong></h1>
     <p>
@@ -266,25 +274,7 @@
         type: d3.annotationCalloutElbow,
         }, 
 
-        //annotation
-        {
-          note: {
-            label: "No Indoor services allowed,Gyms closed.",
-            title: "Nov 11, 2020",
-            wrap: 150,
-            //padding: 10
-          
-        },
-        connector: {
-                end: "dot" 
-              },
-        color: ["orange"],
-        x: x(parseDate('11/11/2020')),
-        y: y(12657),
-        dy: -50,
-        dx: 80,
-        type: d3.annotationCalloutElbow,
-        },
+        
         
         //annotation
         {
@@ -325,6 +315,46 @@
         dx: 10,
         type: d3.annotationCalloutElbow,
         },
+        // annotation 
+      {
+        note: {
+          label: "Trump, First Lady Test Positive for COVID-19",
+          title: " Oct 2, 2020",
+          wrap: 250,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('10/2/2020')),
+      y: y(2206),
+      dy: -180,
+      dx: -30,
+      
+      type: d3.annotationCalloutElbow,
+      },
+      // annotation 
+      {
+        note: {
+          label: "Illinois Highest Cases in One Day: 17608",
+          title: " Nov 5, 2020",
+          wrap: 250,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('11/5/2020')),
+      y: y(17608),
+      dy: 5,
+      dx: 50,
+      
+      type: d3.annotationCalloutElbow,
+      },
           ];
           
           var makeAnnotations = d3.annotation()
@@ -341,7 +371,7 @@
       Source of data: <em>Chicago Health & Human Services</em> and <em>Illinois Department of Public Health</em>
     </p>
     <button onclick="document.location='./index.html'"class="button button">HOME</button>
-    <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:400px;">COVID-19 DEATHS IN CHICAGO</button>
-    <button onclick="document.location='./COVID_Cases.html'"class="button button"style="margin-left:400px;">COVID-19 CASES IN CHICAGO</button>
+    <!-- <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:400px;">COVID-19 DEATHS IN CHICAGO</button>
+    <button onclick="document.location='./COVID_Cases.html'"class="button button"style="margin-left:400px;">COVID-19 CASES IN CHICAGO</button> -->
   </body>
 </html>

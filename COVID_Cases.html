@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<button onclick="document.location='./index.html'"style="margin-left:0;">HOME</button>
+<p style="text-align:center"><A HREF="./COVID-19_Cases_IL_And_CHI.html"align="center"><< </A>Page 3 of 5<A HREF="./COVID-19_Deaths_IL_And_CHI.html"align="center"> >></A></p> 
+  
 
+<!--button onclick="document.location='./COVID_Deaths.html'"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<!--button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button-->
+<button onclick="document.location='./COVID-19_Cases_IL_And_CHI.html'"style="margin-left:0px;">BACK</button>
+<button onclick="document.location='./COVID-19_Deaths_IL_And_CHI.html'"style="margin-left:1200px;">NEXT</button>
 <body>
-  <h1><strong>Confirmed Cases in Chicago</strong></h1>
+  <h2><strong>COVID-19 Daily Confirmed Cases in Chicago by Group</strong></h2>
   <p>
     This page shows a chart with number of confirmed number of Cases in Chicago over the period.
     The below chart can show the number among various groups in Chicago,By default its showing cases among <em><b>FEMALES</b></em>.<br>
@@ -76,11 +83,11 @@
             .call(d3.axisLeft(y));
             svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x",0 - margin)
+        .attr("y", 0 - margin)
+        .attr("x",0 - height/2)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("NUMBERS"); 
+        .text("CASES"); 
     // var y1 = d3.scaleLinear()
           //.domain([0, d3.max(data, function(d) { return +d.Total_Cases; })])  
           //.domain([0, d3.max(data, function(d) { return +d.value; })])
@@ -244,7 +251,8 @@
       <p>
         Source of data: <em>Chicago Health & Human Services</em>
       </p>
-      <button onclick="document.location='./index.html'"class="button button">HOME</button>
-      <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button>
-      <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">NEXT</button>
+      <button onclick="document.location='./index.html'"style="margin-left:0;">HOME</button>
+      <!-- <button onclick="document.location='./COVID_Deaths.html'"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button>
+      button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button -->
+      <button onclick="document.location='./COVID-19_Deaths_IL_And_CHI.html'"style="margin-left:1200px;">NEXT</button>
     </body>

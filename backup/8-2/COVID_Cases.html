@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<body>
+  <h1><strong>Confirmed Cases in Chicago</strong></h1>
+  <p>
+    This page shows a chart with number of confirmed number of Cases in Chicago over the period.
+    The below chart can show the number among various groups in Chicago,By default its showing cases among <em><b>FEMALES</b></em>.<br>
+    Please feel free to select the group, you are most interested in, from the <em><b>drop-down menu below</b></em>.The chart also shows the <em>total number</em> of cases for the group on the top right side<br>
+    When finished please <em><u>CLICK</u></em> the button ,at the bottom of the page,for the next chart you would like to visit OR simply press NEXT.
+  </p>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+  <!-- Initialize a select button -->
+  <select id="selectButton"></select>
+  <div id="graph"></div>
+  <script>
+
+      // set the dimensions and margins of the graph
+      var margin =50,
+          width = 1200 - margin,
+          height = 500- margin;
+      
+      // append the svg object to the body of the page
+      
+      var svg = d3.select("#graph")
+                  .append("svg")
+                  .attr("width",1200 + margin)
+                  .attr("height", 500 + margin )
+                  .append("g")
+                  .attr("transform","translate(" + margin+ "," + margin + ")");
+      
+          
+            
+      var parseTime = d3.timeParse("%m/%d/%Y");
+
+      //Read the data
+      d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/Data/COVID-19_Daily_Cases_Deaths_Hospitalizations.csv", 
+      
+      function(data) {
+        var allGroup = ["Female","Male","Unknown_Gender","Ages_0to17","Ages_18to29","Ages_30to39","Ages_40to49","Ages_50to59","Ages_60to69","Ages_70to79","Age_80andAbove","Ages_Unknown","Latinx","Asian_NonLatinx","Black_NonLatinx","White_NonLatinx","OtherRace_NonLatinx","UnknownRace_Ethnicity"]
+        d3.select("#selectButton")
+          .selectAll("myOptions")
+          .data(allGroup)
+          .enter()
+          .append("option")
+          .text(function (d) { return d; }) 
+          .attr("value", function (d) { return d; });    
+          
+          
+          
+        // Add X axis --> it is a date format
+
+          var x = d3.scaleTime()
+                    .domain(d3.extent(data, function(d) { return  d3.timeParse("%m/%d/%Y")(d.Date); }))
+                    .range([ 0, width ]);
+          svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b/%y")));
+          svg.append("text")
+                //.attr("transform", "translate("+(height+Margin)+)","500)"
+              .attr("transform", "translate(500,500)")
+              .style("text-anchor", "middle")
+              .attr("fill", "black")
+              .text("DATES");
+        
+        // Add Y axis
+          var y = d3.scaleLinear()
+          //.domain([0, d3.max(data, function(d) { return +d.Cases_Ages_0to17; })])  
+          //.domain([0, d3.max(data, function(d) { return +d.value; })])
+          //  .domain([0, d3.max(data, function(d) { return +d.Cases_Ages_0to17; })])
+            .domain([0,1725])
+            .range([ height, 0 ]);
+          svg.append("g")
+            .call(d3.axisLeft(y));
+            svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - margin)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("NUMBERS"); 
+    // var y1 = d3.scaleLinear()
+          //.domain([0, d3.max(data, function(d) { return +d.Total_Cases; })])  
+          //.domain([0, d3.max(data, function(d) { return +d.value; })])
+      //   .domain([0,36])
+      //     .range([ height, 0 ]);
+      //   svg.append("g")
+      //     .attr("transform", "translate( " + width + ", 0 )")
+      //     .attr("class", "axisRed")
+      //     .call(d3.axisRight(y1));
+      
+      
+          // Initialize line with group a
+          var line = svg
+              .append("g")
+              .append("path")
+              .datum(data)
+              .attr("d", d3.line()
+                //.x(function(d) { return x(+d3.timeParse("%m/%d/%Y")(d.Date)) })
+                .x(function(d) { return x(+d3.timeParse("%m/%d/%Y")(d.Date)) })
+                .y(function(d) { return y(+d.Cases_Female) })
+              )
+              .attr("stroke", "green" )
+              .style("stroke-width", 1)
+              .style("fill", "none");
+              
+          var sum = d3.sum(data.map(function(d){ return d.Cases_Female}));
+          var sumDisplay = "Total cases for group of Female is "  + sum;
+          var displaySum = svg.append("svg:text");
+              displaySum
+              .text(sumDisplay)
+              .attr("x", 800)
+              .attr("y", 10)
+              .attr("fill", "black");
+
+            // var line = svg
+            //.append("g")
+            //.append("path")
+            //  .datum(data)
+            //  .attr("d", d3.line()
+            //   //.x(function(d) { return x(+d3.timeParse("%m/%d/%Y")(d.Date)) })
+            //   .x(function(d) { return x(+d3.timeParse("%m/%d/%Y")(d.Date)) })
+            //   .y(function(d) { return y(+d.Deaths_Male) })
+            // )
+            // .attr("stroke", "red" )
+            // .style("stroke-width", 1)
+              //.style("fill", "none");          
+      
+          // A function that update the chart
+          function update(selectedGroup) {
+      
+            // Create new data with the selection
+            var dataFilter = data.map(function(d){return {time: d3.timeParse("%m/%d/%Y")(d.Date), value:d[selectedGroup]} });
+            
+              //{time: d3.timeParse("%m/%d/%Y")(d.Date), value:d[selectedGroup]} })
+            //console.log(dataFilter);
+            // Give these new data to update line
+            
+            line
+                .datum(dataFilter)
+                .transition()
+                .duration(4000)
+                .attr("d", d3.line()
+                  .x(function(d) { return x(+d.time) })
+                      //x(+d3.timeParse("%m/%d/%Y")(d.Date)) })
+                  .y(function(d) { return y(+d.value) })
+                )
+                .attr("stroke","green" );
+
+                var substringValue= selectedGroup.substring(6);
+                console.log(substringValue);
+                var sum = d3.sum(data.map(function(d){ return d[selectedGroup]}));
+                var sumDisplay = "Total Cases for group of "+substringValue +" is "  + sum;
+                console.log(sumDisplay);
+                displaySum.text(sumDisplay);
+          }
+      
+          // When the button is changed, run the updateChart function
+          d3.select("#selectButton").on("change", function(d) {
+              // recover the option that has been chosen
+              var selectedOption = "Cases_"+ d3.select(this).property("value");
+              console.log(selectedOption);
+              // run the updateChart function with this selected option
+              update(selectedOption);
+          });
+      var parseDate = function(d){ return d3.timeParse("%m/%d/%Y")(d)}
+      const annotations = [
+        
+      // annotation
+          {
+        note: {
+          label: "US COVID-19 Cases Reach 2 Million, Chicago Case count: 233",
+          title: " Jun 10, 2020",
+          wrap: 150,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('6/10/2020')),
+      y: y(0),
+      dy: -100,
+      dx: 10,
+      
+      type: d3.annotationCalloutElbow,
+      },
+      // annotation 2
+      {
+        note: {
+          label: "Trump, First Lady Test Positive for COVID-19, Chicago Case count: 415",
+          title: " Oct 2, 2020",
+          wrap: 250,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('10/2/2020')),
+      y: y(0),
+      dy: -300,
+      dx: -30,
+      
+      type: d3.annotationCalloutElbow,
+      },
+
+      // annotation 3
+      {
+        note: {
+          label: "Globally, confirmed cases surpass 85 million, Chicago Case count: 1877",
+          title: " Jan 4, 2021",
+          wrap: 200,
+          //padding: 10
+        
+      },
+      connector: {
+              end: "dot" 
+            },
+      color: ["orange"],
+      x: x(parseDate('1/4/2021')),
+      y: y(0),
+      dy: -150,
+      dx: 30,
+      
+      type: d3.annotationCalloutElbow,
+      },
+        ];
+        
+        var makeAnnotations = d3.annotation()
+                                .annotations(annotations)
+      
+          svg.append("g")
+            .call(makeAnnotations)        
+      
+      })
+      
+      
+      </script>
+      <p>
+        Source of data: <em>Chicago Health & Human Services</em>
+      </p>
+      <button onclick="document.location='./index.html'"class="button button">HOME</button>
+      <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">COVID-19 DEATHS IN CHICAGO</button>
+      <button onclick="document.location='./COVID_Deaths.html'"class="button button"style="margin-left:500px;">NEXT</button>
+    </body>
