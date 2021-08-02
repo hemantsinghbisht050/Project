@@ -19,6 +19,7 @@
       Please feel free to <strong>hover over</strong> the graph to see the <em>Number of cases</em> at any point of Time 
       When finished please click NEXT to continue the journey,Next we will be looking at Chicago's confirmed cases based on the defined community. 
     </p>
+    <div class='tooltip'></div>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
@@ -29,11 +30,11 @@
     var margin = 60,
         width = 1200 - margin ,
         height = 500 - margin;
-
-    var div = d3.select("body")
-                .append("div")
-                .attr("id", "tooltip")
-                .attr("opacity", 0);
+    
+    // var div = d3.select("body")
+    //             .append("div")
+    //             .attr("class", "tooltip")
+    //             .attr("opacity", 0);
 
     // append the svg object to the body of the page
     var svg = d3.select("body")
@@ -44,10 +45,10 @@
         .attr("transform",
               "translate(" + margin+ "," + margin + ")");
 
-    svg.append("circle").attr("cx",1000).attr("cy",0).attr("r", 6).style("fill", "green")
-    svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "purple")
-    svg.append("text").attr("x", 1010).attr("y", 0).text("COVID-19 Cases in Chicago").style("font-size", "15px").style("fill", "green").attr("alignment-baseline","middle")
-    svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Cases in Illinois").style("font-size", "15px").style("fill", "purple").attr("alignment-baseline","middle")
+    svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "green")
+    svg.append("circle").attr("cx",1000).attr("cy",0).attr("r", 6).style("fill", "purple")
+    svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Cases in Chicago").style("font-size", "15px").style("fill", "green").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 0).text("COVID-19 Cases in Illinois").style("font-size", "15px").style("fill", "purple").attr("alignment-baseline","middle")
     
     //Read the Chicago data
     d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/Data/COVID-19_IL_And_CHICAGO.csv",
@@ -169,7 +170,9 @@
           .attr("d", d3.line()
             .x(function(d) { return x(d.date) })
             .y(function(d) { return y(d.il_cases) })
-            );
+            )
+          .append('title')
+          // .text(function(d){return value: d.date +d.il_cases});
         
         // svg.append("path")
         //   .datum(data)
@@ -181,6 +184,8 @@
         //     .y(function(d) { return y(d.il_deaths) })
         //     );
         var formatDate = d3.timeFormat("%b-%d-%Y");
+          var div = d3.select(".tooltip");
+      
         svg.selectAll("dot")	
           .data(data)			
           .enter()
@@ -191,19 +196,19 @@
           .attr("fill", 'none')
           .style("stroke", "green")
           .on('mouseover', function (d) {
-              //d3.select(this).transition()
+              // d3.select(this).transition()
               //     .duration('50')
               //     .attr('opacity', '.85');
               //Makes the new div appear on hover:
               div.transition()
                   .duration(200)
                   .style("opacity", .9);
-              var val = formatDate(d.date)+': '+(d.chi_cases).toString()+' Cases in Chicago';
+              var val = formatDate(d.date)+': '+(d.chi_cases).toString()+' Cases In Chicago';
               //console.log(val);
               div.html(val)
               .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY) + "px")
-              .attr("stroke","purple");
+              .style("top", (d3.event.pageY) + "px");
+              // .attr("stroke","purple");
             })    
           .on('mouseout', function (d) {
                 //d3.select(this).transition()
@@ -218,7 +223,7 @@
           .data(data)			
           .enter()
           .append("circle")								
-          .attr("r", 3.0)		
+          .attr("r", 4.0)		
           .attr("cx", function(d) { return x(d.date); })		 
           .attr("cy", function(d) { return y(d.il_cases); })		
           .attr("fill", 'none')

@@ -35,15 +35,17 @@ h2 { color: rgb(69, 95, 212);
         fill: red;
         }
 
-div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 60px;					
-    height: 28px;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: purple;	
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
-}        
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: whitesmoke;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity:0;
+    padding:5px;
+  }

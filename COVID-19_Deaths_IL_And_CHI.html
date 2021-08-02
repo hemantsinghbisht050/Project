@@ -8,6 +8,7 @@
 <button onclick="document.location='./COVID_Cases.html'"style="margin-left:0px;">BACK</button>
 <button onclick="document.location='./COVID_Deaths.html'"style="margin-left:1200px;">NEXT</button>
   <body>
+    <div class='tooltip'></div>
     <h2><strong>COVID-19 Daily deaths in Illinois and Chicago</strong></h2>
     <p>
       This page plots Chicago's Confirmed daily deaths and Illinois's daily deaths.
@@ -40,11 +41,11 @@
               "translate(" + margin+ "," + margin + ")");
 
     
-    svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "tomato")
-    svg.append("circle").attr("cx",1000).attr("cy",40).attr("r", 6).style("fill", "brown")
+    svg.append("circle").attr("cx",1000).attr("cy",40).attr("r", 6).style("fill", "tomato")
+    svg.append("circle").attr("cx",1000).attr("cy",20).attr("r", 6).style("fill", "brown")
     
-    svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Deaths in Chicago").style("font-size", "15px").style("fill", "tomato").attr("alignment-baseline","middle")
-    svg.append("text").attr("x", 1010).attr("y", 40).text("COVID-19 Deaths in Illinois").style("font-size", "15px").style("fill", "brown").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 40).text("COVID-19 Deaths in Chicago").style("font-size", "15px").style("fill", "tomato").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 1010).attr("y", 20).text("COVID-19 Deaths in Illinois").style("font-size", "15px").style("fill", "brown").attr("alignment-baseline","middle")
 
     //Read the Chicago data
     d3.csv("https://raw.githubusercontent.com/hemantsinghbisht050/Project/gh-pages/Data/COVID-19_IL_And_CHICAGO.csv",
@@ -177,6 +178,7 @@
             .y(function(d) { return y(d.il_deaths) })
             );
         var formatDate = d3.timeFormat("%b-%d-%Y");
+        var div = d3.select(".tooltip");
         svg.selectAll("dot")	
           .data(data)			
           .enter()
